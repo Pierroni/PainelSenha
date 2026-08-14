@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#087f8c">
+
+    <title>Atendimento | Vida+ Saúde</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet">
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+
+    <!-- =====================================================
+         CSS DO PROJETO
+    ====================================================== -->
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}">
+
+</head>
+
+
+<body class="app-body">
+
+
+<!-- =========================================================
+     BACKGROUND
+========================================================== -->
+
+<div class="background-glow glow-one"></div>
+
+<div class="background-glow glow-two"></div>
+
+
+
+<!-- =========================================================
+     TOPBAR
+========================================================== -->
+
+<header class="topbar">
+
+    <div class="container-fluid px-4 px-lg-5">
+
+        <div class="d-flex align-items-center justify-content-between">
+
+
+            <!-- LOGO -->
+
+            <a href="/"
+               class="brand">
+
+                <div class="brand-icon">
+
+                    <span>
+                        +
+                    </span>
+
+                </div>
+
+
+                <div class="brand-text">
+
+                    <strong>
+                        VIDA+
+                    </strong>
+
+                    <small>
+                        SAÚDE
+                    </small>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- STATUS -->
+
+            <div class="topbar-actions">
+
+
+                <div class="status-indicator">
+
+                    <span class="status-dot"></span>
+
+                    Atendimento ativo
+
+                </div>
+
+
+                <a href="/"
+                   class="btn-back">
+
+                    ← Voltar
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================== -->
+
+<main class="dashboard-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="dashboard-header">
+
+
+        <div>
+
+            <span class="section-label">
+
+                CENTRAL DE ATENDIMENTO
+
+            </span>
+
+
+            <h1>
+
+                Painel do atendente
+
+            </h1>
+
+
+            <p>
+
+                Gerencie as chamadas e acompanhe
+                o histórico de atendimento.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             GUICHÊ
+        ================================================== -->
+
+        <div class="guiche-selector">
+
+            <label for="guiche">
+
+                GUICHÊ
+
+            </label>
+
+
+            <select
+                    id="guiche"
+                    class="form-select">
+
+                <option value="1">
+                    Guichê 01
+                </option>
+
+                <option value="2">
+                    Guichê 02
+                </option>
+
+                <option value="3"
+                        selected>
+
+                    Guichê 03
+
+                </option>
+
+                <option value="4">
+                    Guichê 04
+                </option>
+
+                <option value="5">
+                    Guichê 05
+                </option>
+
+            </select>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         GRID PRINCIPAL
+    ====================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =================================================
+             COLUNA DE ATENDIMENTO
+        ================================================== -->
+
+        <div class="tickets-column">
+
+
+            <!-- =============================================
+                 SENHA NORMAL
+            ============================================== -->
+
+            <div class="current-ticket-card normal-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="card-top">
+
+                    <div>
+
+                        <span class="section-label">
+
+                            ATENDIMENTO NORMAL
+
+                        </span>
+
+
+                        <span class="live-label">
+
+                            <span></span>
+
+                            AO VIVO
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SENHA -->
+
+                <div class="ticket-display">
+
+
+                    <div
+                            id="senhaNormal"
+                            class="ticket-number"
+                            th:text="${senhaNormalAtual != null ? senhaNormalAtual.numero : '--'}">
+
+                        --
+
+                    </div>
+
+
+                    <div
+                            id="statusNormal"
+                            class="ticket-status"
+                            th:classappend="${senhaNormalAtual == null ? ' muted' : ''}">
+
+                        <span class="ticket-status-dot"
+                              th:if="${senhaNormalAtual != null}"></span>
+
+                        <span th:text="${senhaNormalAtual != null
+                            ? 'Em atendimento'
+                            : 'Nenhuma senha normal em atendimento'}">
+                            Nenhuma senha normal em atendimento
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BOTÃO -->
+
+                <div class="ticket-actions">
+
+                    <button
+                            type="button"
+                            id="btnChamarNormal" data-tipo="NORMAL"
+                            class="btn-call">
+
+
+                        <span class="button-icon">
+
+                            →
+
+                        </span>
+
+
+                        <span>
+
+                            Chamar próxima normal
+
+                        </span>
+
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SENHA PREFERENCIAL
+            ============================================== -->
+
+            <div class="current-ticket-card preferential-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="card-top">
+
+                    <div>
+
+                        <span class="section-label preferential-label">
+
+                            ATENDIMENTO PREFERENCIAL
+
+                        </span>
+
+
+                        <span class="preferential-badge">
+
+                            PRIORIDADE
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SENHA -->
+
+                <div class="ticket-display">
+
+
+                    <div
+                            id="senhaPreferencial"
+                            class="ticket-number preferential-number"
+                            th:text="${senhaPreferencialAtual != null ? senhaPreferencialAtual.numero : '--'}">
+
+                        --
+
+                    </div>
+
+
+                    <div
+                            id="statusPreferencial"
+                            class="ticket-status preferential-status"
+                            th:classappend="${senhaPreferencialAtual == null ? ' muted' : ''}">
+
+                        <span class="preferential-dot"
+                              th:if="${senhaPreferencialAtual != null}"></span>
+
+                        <span th:text="${senhaPreferencialAtual != null
+                            ? 'Atendimento prioritário'
+                            : 'Nenhuma senha preferencial em atendimento'}">
+                            Nenhuma senha preferencial em atendimento
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BOTÃO -->
+
+                <div class="ticket-actions">
+
+                    <button
+                            type="button"
+                            id="btnChamarPreferencial" data-tipo="PREFERENCIAL"
+                            class="btn-call btn-preferential">
+
+
+                        <span class="button-icon">
+
+                            ♿
+
+                        </span>
+
+
+                        <span>
+
+                            Chamar próxima preferencial
+
+                        </span>
+
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             HISTÓRICO
+        ================================================== -->
+
+        <div class="history-card">
+
+
+            <!-- HEADER -->
+
+            <div class="history-header">
+
+
+                <div>
+
+                    <span class="section-label">
+
+                        HISTÓRICO
+
+                    </span>
+
+
+                    <h2>
+
+                        Últimas chamadas
+
+                    </h2>
+
+                </div>
+
+
+
+                <div class="history-count">
+
+                    <span
+                            th:text="${historico != null
+                                ? historico.size()
+                                : 0}">
+
+                        0
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LISTA COM SCROLL -->
+
+            <div
+                    class="history-list"
+                    id="historyList">
+
+
+                <!-- =========================================
+                     HISTÓRICO
+                ========================================== -->
+
+                <div
+                        th:if="${historico != null && !historico.isEmpty()}"
+                        th:each="senha, iter : ${historico}"
+                        class="history-item">
+
+
+                    <!-- POSIÇÃO -->
+
+                    <div
+                            class="history-position"
+                            th:text="${iter.index + 1}">
+
+                        1
+
+                    </div>
+
+
+
+                    <!-- SENHA -->
+
+                    <div
+                            class="history-ticket"
+                            th:text="${senha.numero}">
+
+                        N001
+
+                    </div>
+
+
+
+                    <!-- TIPO -->
+
+                    <div
+                            class="history-type"
+                            th:classappend="${senha.tipo.name() == 'PREFERENCIAL'
+                                ? 'history-preferential'
+                                : ''}"
+                            th:text="${senha.tipo}">
+
+                        NORMAL
+
+                    </div>
+
+
+
+                    <!-- GUICHÊ -->
+
+                    <div class="history-guiche">
+
+                        <span>
+
+                            Guichê
+
+                        </span>
+
+
+                        <strong
+                                th:text="${senha.guiche}">
+
+                            03
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     HISTÓRICO VAZIO
+                ========================================== -->
+
+                <div
+                        th:if="${historico == null || historico.isEmpty()}"
+                        class="empty-history">
+
+
+                    <div class="empty-icon">
+
+                        —
+
+                    </div>
+
+
+                    <h3>
+
+                        Nenhuma chamada
+
+                    </h3>
+
+
+                    <p>
+
+                        O histórico aparecerá aqui
+                        após a primeira chamada.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INFORMAÇÕES
+    ====================================================== -->
+
+    <section class="quick-info">
+
+
+        <!-- SISTEMA -->
+
+        <div class="info-item">
+
+
+            <div class="info-icon">
+
+                ✓
+
+            </div>
+
+
+            <div>
+
+                <strong>
+
+                    Sistema ativo
+
+                </strong>
+
+
+                <span>
+
+                    Operação normal
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ATENDIMENTO -->
+
+        <div class="info-item">
+
+
+            <div class="info-icon">
+
+                ⏱
+
+            </div>
+
+
+            <div>
+
+                <strong>
+
+                    Atendimento
+
+                </strong>
+
+
+                <span>
+
+                    Tempo real
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EMPRESA -->
+
+        <div class="info-item">
+
+
+            <div class="info-icon">
+
+                +
+
+            </div>
+
+
+            <div>
+
+                <strong>
+
+                    Vida+ Saúde
+
+                </strong>
+
+
+                <span>
+
+                    Atendimento humanizado
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================================================
+     MODAL DE CONFIRMAÇÃO
+========================================================== -->
+
+<div
+        id="callOverlay"
+        class="call-overlay">
+
+
+    <div class="call-modal">
+
+
+        <!-- ÍCONE -->
+
+        <div class="call-success-icon">
+
+            ✓
+
+        </div>
+
+
+        <span class="section-label">
+
+            SENHA CHAMADA
+
+        </span>
+
+
+        <!-- SENHA -->
+
+        <div
+                id="modalTicket"
+                class="modal-ticket">
+
+            N001
+
+        </div>
+
+
+        <!-- GUICHÊ -->
+
+        <p>
+
+            Dirija-se ao
+
+            <strong id="modalGuiche">
+
+                Guichê 03
+
+            </strong>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     GSAP
+========================================================== -->
+
+<script
+        src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js">
+</script>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================== -->
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT DO PROJETO
+========================================================== -->
+
+<script
+        th:src="@{/js/atendimento.js}">
+</script>
+
+
+</body>
+
+</html>

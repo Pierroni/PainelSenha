@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f8c">
+  <title>Painel de Senhas | Vida+ Saúde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="display-body">
+
+<header class="display-header">
+  <div class="display-brand">
+    <div class="brand-icon">+</div>
+    <div>
+      <strong>VIDA+</strong>
+      <span>SAÚDE</span>
+    </div>
+  </div>
+
+  <div class="display-status">
+    <span class="status-dot"></span>
+    Atendimento em andamento
+  </div>
+
+  <a href="/" class="btn-voltar">
+    ← Voltar
+  </a>
+</header>
+
+<main class="display-main display-main-two-tickets">
+
+  <section class="public-tickets">
+
+    <article class="public-ticket-card public-normal">
+      <div class="public-ticket-label">ATENDIMENTO NORMAL</div>
+
+      <div id="displayNormal"
+           class="public-ticket-number"
+           th:text="${senhaNormalAtual != null ? senhaNormalAtual.numero : '--'}">
+        --
+      </div>
+
+      <div id="guicheNormal" class="public-ticket-guiche"
+           th:classappend="${senhaNormalAtual == null ? ' is-hidden' : ''}">
+        DIRIJA-SE AO GUICHÊ
+        <strong id="numeroGuicheNormal"
+                th:text="${senhaNormalAtual != null ? senhaNormalAtual.guiche : '--'}">03</strong>
+      </div>
+
+      <div id="waitingNormal"
+           class="public-ticket-waiting"
+           th:classappend="${senhaNormalAtual != null ? ' is-hidden' : ''}">
+        Aguardando chamada
+      </div>
+    </article>
+
+    <article class="public-ticket-card public-preferential">
+      <div class="public-ticket-label">ATENDIMENTO PREFERENCIAL</div>
+
+      <div id="displayPreferential"
+           class="public-ticket-number"
+           th:text="${senhaPreferencialAtual != null ? senhaPreferencialAtual.numero : '--'}">
+        --
+      </div>
+
+      <div id="guichePreferencial" class="public-ticket-guiche"
+           th:classappend="${senhaPreferencialAtual == null ? ' is-hidden' : ''}">
+        DIRIJA-SE AO GUICHÊ
+        <strong id="numeroGuichePreferencial"
+                th:text="${senhaPreferencialAtual != null ? senhaPreferencialAtual.guiche : '--'}">03</strong>
+      </div>
+
+      <div id="waitingPreferencial"
+           class="public-ticket-waiting"
+           th:classappend="${senhaPreferencialAtual != null ? ' is-hidden' : ''}">
+        Aguardando chamada
+      </div>
+    </article>
+
+  </section>
+
+  <section class="display-history">
+    <div class="display-history-title">ÚLTIMAS CHAMADAS</div>
+
+    <div class="display-history-list">
+      <div th:if="${historico != null && !historico.isEmpty()}"
+           th:each="senha : ${historico}"
+           class="display-history-item">
+
+        <div>
+          <div class="display-history-ticket" th:text="${senha.numero}">N001</div>
+          <small class="display-history-type"
+                 th:text="${senha.tipo}">NORMAL</small>
+        </div>
+
+        <div class="display-history-guiche">
+          Guichê
+          <strong th:text="${senha.guiche}">03</strong>
+        </div>
+      </div>
+
+      <div th:if="${historico == null || historico.isEmpty()}"
+           class="display-history-empty">
+        Aguardando chamadas...
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="display-footer">
+  <div>Por favor, aguarde sua senha ser chamada.</div>
+  <div>VIDA+ SAÚDE</div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // Não recarrega a página. Apenas atualiza os dados do painel.
+    const normal = document.getElementById("displayNormal");
+    const preferencial = document.getElementById("displayPreferential");
+    const guicheNormal = document.getElementById("guicheNormal");
+    const guichePreferencial = document.getElementById("guichePreferencial");
+    const numeroGuicheNormal = document.getElementById("numeroGuicheNormal");
+    const numeroGuichePreferencial = document.getElementById("numeroGuichePreferencial");
+    const waitingNormal = document.getElementById("waitingNormal");
+    const waitingPreferencial = document.getElementById("waitingPreferencial");
+    const history = document.querySelector(".display-history-list");
+
+    function numeroDaSenha(senha) {
+      return senha && senha.numero ? senha.numero : "--";
+    }
+
+    function atualizarNumero(elemento, valor) {
+      if (!elemento) return;
+      if (elemento.textContent.trim() !== valor) {
+        elemento.textContent = valor;
+        elemento.classList.remove("ticket-updated");
+        void elemento.offsetWidth;
+        elemento.classList.add("ticket-updated");
+      }
+    }
+
+    function atualizarGuiche(senha, blocoGuiche, numeroGuiche, blocoAguardando) {
+      const existe = !!senha;
+
+      if (blocoGuiche) blocoGuiche.classList.toggle("is-hidden", !existe);
+      if (blocoAguardando) blocoAguardando.classList.toggle("is-hidden", existe);
+      if (numeroGuiche) numeroGuiche.textContent = existe ? senha.guiche : "--";
+    }
+
+    function atualizarHistorico(historico) {
+      if (!history) return;
+
+      if (!historico || historico.length === 0) {
+        history.innerHTML = '<div class="display-history-empty">Aguardando chamadas...</div>';
+        return;
+      }
+
+      history.innerHTML = historico.map(senha => `
+        <div class="display-history-item">
+          <div>
+            <div class="display-history-ticket">${senha.numero}</div>
+            <small class="display-history-type">${senha.tipo}</small>
+          </div>
+          <div class="display-history-guiche">
+            Guichê
+            <strong>${senha.guiche}</strong>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function atualizarPainel() {
+      try {
+        const response = await fetch("/painel/api", {
+          method: "GET",
+          cache: "no-store",
+          headers: { "Accept": "application/json" }
+        });
+
+        if (!response.ok) return;
+
+        const dados = await response.json();
+
+        atualizarNumero(normal, numeroDaSenha(dados.senhaNormalAtual));
+        atualizarNumero(preferencial, numeroDaSenha(dados.senhaPreferencialAtual));
+
+        atualizarGuiche(
+          dados.senhaNormalAtual,
+          guicheNormal,
+          numeroGuicheNormal,
+          waitingNormal
+        );
+
+        atualizarGuiche(
+          dados.senhaPreferencialAtual,
+          guichePreferencial,
+          numeroGuichePreferencial,
+          waitingPreferencial
+        );
+
+        atualizarHistorico(dados.historico);
+
+      } catch (erro) {
+        console.warn("Não foi possível atualizar o painel:", erro);
+      }
+    }
+
+    // Atualiza somente os dados, sem reload da página.
+    atualizarPainel();
+    setInterval(atualizarPainel, 1000);
+  });
+</script>
+
+</body>
+</html>
