@@ -1,5 +1,7 @@
 package PainelSenhas.gerador.service;
 
+import PainelSenhas.gerador.factory.SenhaFactory;
+import PainelSenhas.gerador.factory.SenhaFactoryProvider;
 import PainelSenhas.gerador.model.Senha;
 import PainelSenhas.gerador.model.TipoSenha;
 import lombok.Getter;
@@ -40,19 +42,12 @@ public class GerenciadorSenhasService {
     }
 
     public synchronized Senha gerarSenha(TipoSenha tipo) {
-        int numero;
+        int numero = (tipo == TipoSenha.NORMAL) ? ++numeroNormal : ++numeroPreferencial;
 
-        if (tipo == TipoSenha.NORMAL) {
-            numero = ++numeroNormal;
-        } else {
-            numero = ++numeroPreferencial;
-        }
 
-        String identificador = tipo == TipoSenha.NORMAL
-                ? String.format("N%03d", numero)
-                : String.format("P%03d", numero);
+        SenhaFactory factory = SenhaFactoryProvider.getFactory(tipo);
 
-        return new Senha(identificador, tipo);
+        return factory.criarSenha(numero);
     }
 
     public synchronized void chamarSenha(Senha senha, int guiche) {
@@ -66,11 +61,8 @@ public class GerenciadorSenhasService {
         } else {
             senhaPreferencialAtual = senha;
         }
-
         historico.add(0, senha);
 
-        // Mantém as últimas 20 chamadas para que o atendente possa
-        // rolar e consultar chamadas anteriores.
         if (historico.size() > 20) {
             historico.remove(historico.size() - 1);
         }
